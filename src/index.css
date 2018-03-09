@@ -18,6 +18,15 @@ ul {
   margin-bottom: 10px;
 }
 
+.main-board-row {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.each-board {
+  margin: 15px;
+}
+
 .square {
   background: #fff;
   border: 1px solid #999;
