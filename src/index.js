@@ -9,26 +9,32 @@ class Game extends React.Component {
     this.state = {
       squares: Array.from({length:9}, e => Array(9).fill(null)),
       stepNumber: 0,
-      xIsNext: true
+      xIsNext: true,
+      validBoardNumbers: [0,1,2,3,4,5,6,7,8],
     };
   }
 
   handleClick = (boardnumber, squarenumber) => {
  /*   const history = this.state.history.slice(0, this.state.stepNumber + 1);
     const current = history[history.length - 1];*/
-    var squares = this.state.squares.slice();
+    const squares = this.state.squares.slice();
 
+    /* check if square is filled */
+    if ( squares[boardnumber][squarenumber] || !(this.state.validBoardNumbers.indexOf(boardnumber) > -1) ) {
+      return;
+    }
+
+    const newValidBoardNumbers = Array(1).fill(squarenumber);
     squares[boardnumber][squarenumber] = this.state.xIsNext ? 'X' : 'O';
+
 
     this.setState({
       squares: squares,
       xIsNext: !this.state.xIsNext,
       stepNumber: this.state.stepNumber + 1,
+      validBoardNumbers: newValidBoardNumbers,
     });
-    /*  
-    if (calculateWinner(squares) || squares[boardnumber]) {
-      return;
-    }*/
+
   }
 
   jumpTo(step) {
