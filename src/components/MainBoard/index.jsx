@@ -3,7 +3,7 @@ import EachBoard from "../EachBoard"
 
 class MainBoard extends React.Component {
 
-  renderSquare(i) {
+  renderBoard(i) {
     return (
       <EachBoard
         boardnumber = {i}
@@ -17,19 +17,19 @@ class MainBoard extends React.Component {
     return (
       <div className="main-board">
         <div className="main-board-row">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
+          {this.renderBoard(0)}
+          {this.renderBoard(1)}
+          {this.renderBoard(2)}
         </div>
         <div className="main-board-row">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
+          {this.renderBoard(3)}
+          {this.renderBoard(4)}
+          {this.renderBoard(5)}
         </div>
         <div className="main-board-row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
+          {this.renderBoard(6)}
+          {this.renderBoard(7)}
+          {this.renderBoard(8)}
         </div>
       </div>
     );
