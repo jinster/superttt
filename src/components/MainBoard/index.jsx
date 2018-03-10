@@ -1,6 +1,5 @@
 import React from "react";
 import EachBoard from "../EachBoard";
-import Styles from "./index.modules.css";
 
 class MainBoard extends React.Component {
   renderBoard(i) {

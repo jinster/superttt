@@ -24,7 +24,12 @@ ul {
 }
 
 .each-board {
-  margin: 15px;
+  padding: 20px;
+}
+
+.isValid {
+  background-color: cyan;
+  padding: 20px;
 }
 
 .square {
