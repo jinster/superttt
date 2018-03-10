@@ -7,47 +7,48 @@ class Game extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      squares: Array.from({length:9}, e => Array(9).fill(null)),
+      squares: Array.from({ length: 9 }, e => Array(9).fill(null)),
       stepNumber: 0,
       xIsNext: true,
-      validBoardNumbers: [0,1,2,3,4,5,6,7,8],
+      validBoardNumbers: [0, 1, 2, 3, 4, 5, 6, 7, 8]
     };
   }
 
   handleClick = (boardnumber, squarenumber) => {
- /*   const history = this.state.history.slice(0, this.state.stepNumber + 1);
+    /*   const history = this.state.history.slice(0, this.state.stepNumber + 1);
     const current = history[history.length - 1];*/
     const squares = this.state.squares.slice();
 
     /* check if square is filled */
-    if ( squares[boardnumber][squarenumber] || !(this.state.validBoardNumbers.indexOf(boardnumber) > -1) ) {
+    if (
+      squares[boardnumber][squarenumber] ||
+      !(this.state.validBoardNumbers.indexOf(boardnumber) > -1)
+    ) {
       return;
     }
 
     const newValidBoardNumbers = Array(1).fill(squarenumber);
-    squares[boardnumber][squarenumber] = this.state.xIsNext ? 'X' : 'O';
-
+    squares[boardnumber][squarenumber] = this.state.xIsNext ? "X" : "O";
 
     this.setState({
       squares: squares,
       xIsNext: !this.state.xIsNext,
       stepNumber: this.state.stepNumber + 1,
-      validBoardNumbers: newValidBoardNumbers,
+      validBoardNumbers: newValidBoardNumbers
     });
-
-  }
+  };
 
   jumpTo(step) {
     this.setState({
       stepNumber: step,
-      xIsNext: (step % 2) === 0
+      xIsNext: step % 2 === 0
     });
   }
 
   render() {
     const current = this.state.squares;
     const winner = calculateWinner(current);
-/*
+    /*
     const moves = history.map((step, move) => {
       const desc = move ?
         'Go to move #' + move :
@@ -70,15 +71,16 @@ class Game extends React.Component {
       <div className="game">
         <div className="game-board">
           <MainBoard
-            squares     = {this.state.squares}
-            handleClick = {this.handleClick}
-            stepNumber  = {this.state.stepNumber}
-            xIsNext     = {this.state.xIsNext}
+            squares={this.state.squares}
+            handleClick={this.handleClick}
+            stepNumber={this.state.stepNumber}
+            xIsNext={this.state.xIsNext}
+            validBoardNumbers={this.state.validBoardNumbers}
           />
         </div>
         <div className="game-info">
-          <div></div>
-          <ol></ol>
+          <div />
+          <ol />
         </div>
       </div>
     );

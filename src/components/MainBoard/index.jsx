@@ -1,14 +1,15 @@
 import React from "react";
-import EachBoard from "../EachBoard"
+import EachBoard from "../EachBoard";
+import Styles from "./index.modules.css";
 
 class MainBoard extends React.Component {
-
   renderBoard(i) {
     return (
       <EachBoard
-        boardnumber = {i}
-        squares     = {this.props.squares}
-        handleClick = {this.props.handleClick}
+        isValid={this.props.validBoardNumbers.indexOf(i) > -1}
+        boardnumber={i}
+        squares={this.props.squares}
+        handleClick={this.props.handleClick}
       />
     );
   }
