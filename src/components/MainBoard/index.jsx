@@ -6,7 +6,8 @@ class MainBoard extends React.Component {
     return (
       <EachBoard
         isValid={this.props.validBoardNumbers.indexOf(i) > -1}
-        boardnumber={i}
+        boardNumber={i}
+        eachBoardStatus={this.props.eachBoardStatus}
         squares={this.props.squares}
         handleClick={this.props.handleClick}
       />
