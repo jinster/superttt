@@ -11,7 +11,7 @@ class Game extends React.Component {
       stepNumber: 0,
       xIsNext: true,
       validBoardNumbers: [0, 1, 2, 3, 4, 5, 6, 7, 8],
-      eachBoardStatus: Array(9).fill(null)
+      eachBoardStatus: Array(9).fill(null),
       /* eachBoardStatus -  null = board is still open or contested
                             'T'  = board is filled but no winner
                             'X'  = board is won by 'X' player
@@ -46,7 +46,7 @@ class Game extends React.Component {
       [6, 7, 8],
       [0, 3, 6],
       [1, 4, 7],
-      [2, 5, 8],
+      [2, 5, 8], 
       [0, 4, 8],
       [2, 4, 6]
     ];
@@ -69,9 +69,6 @@ class Game extends React.Component {
         if (squares[boardnumber][i] === null) {
           filled = false;
         }
-        console.log("hi");
-        console.log(i);
-        console.log(filled);
         i++;
       }
       if (filled) {
@@ -83,7 +80,7 @@ class Game extends React.Component {
 
     if (newEachBoardStatus[squarenumber] != null) {
       /* if clicked square leads to a filled EachBoard, every other non-filled board becomes a legal move */
-      for (let i = 0; i < 8; i++) {
+      for (let i = 0; i < 9; i++) {
         if (newEachBoardStatus[i] === null) {
           newValidBoardNumbers.push(i);
         }
@@ -98,7 +95,7 @@ class Game extends React.Component {
       xIsNext: !this.state.xIsNext,
       stepNumber: this.state.stepNumber + 1,
       validBoardNumbers: newValidBoardNumbers,
-      eachBoardStatus: newEachBoardStatus
+      eachBoardStatus: newEachBoardStatus,
     });
   };
 
@@ -138,17 +135,15 @@ class Game extends React.Component {
             squares={this.state.squares}
             handleClick={this.handleClick}
             stepNumber={this.state.stepNumber}
-            xIsNext={this.state.xIsNext}
+            xIsNext={this.state.xIsNext} 
             validBoardNumbers={this.state.validBoardNumbers}
             eachBoardStatus={this.state.eachBoardStatus}
           />
         </div>
         <div className="game-info">
-          Current Player: {this.state.xIsNext ? "X" : "O"}
-          <br />
-          Valid Boards: {this.state.validBoardNumbers}
-          <br />
-          Board Status: {this.state.eachBoardStatus}
+        Current Player: {this.state.xIsNext ? "X" : "O"}<br/>
+        Valid Boards: {this.state.validBoardNumbers}<br/>
+        Board Status: {this.state.eachBoardStatus}
           <div />
           <ol />
         </div>
