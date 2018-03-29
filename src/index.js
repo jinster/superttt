@@ -28,7 +28,7 @@ class Game extends React.Component {
     const newEachBoardStatus = this.state.eachBoardStatus.slice();
     const newValidBoardNumbers = []; /* will be rebuilt every turn */
 
-    /* check if square is filled */
+    /* check if square is filled, if so, do nothing on click */
     if (
       squares[boardnumber][squarenumber] ||
       !(this.state.validBoardNumbers.indexOf(boardnumber) > -1)
@@ -90,6 +90,19 @@ class Game extends React.Component {
       newValidBoardNumbers.push(squarenumber);
     }
 
+    /* check if we have an overall winner */
+    for (let i = 0; i < lines.length; i++) {
+      const [a, b, c] = lines[i];
+      if (
+        newEachBoardStatus[a] &&
+        newEachBoardStatus[a] === newEachBoardStatus[b] &&
+        newEachBoardStatus[a] === newEachBoardStatus[c]
+      ) {
+        /* we have a winner...  no more moves are legal */
+      newValidBoardNumbers.length = 0;
+      }
+    }
+
     this.setState({
       squares: squares,
       xIsNext: !this.state.xIsNext,
@@ -104,12 +117,11 @@ class Game extends React.Component {
       stepNumber: step,
       xIsNext: step % 2 === 0
     });
-  }
+  };
 
   render() {
-    const current = this.state.squares;
     /*
-    const winner = calculateWinner(current);
+    const winner = calculateWinner(this.state.eachBoardStatus);
     const moves = history.map((step, move) => {
       const desc = move ?
         'Go to move #' + move :
@@ -149,7 +161,9 @@ class Game extends React.Component {
         </div>
       </div>
     );
+
   }
+
 }
 
 // ========================================
