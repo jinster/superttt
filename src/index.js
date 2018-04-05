@@ -2,16 +2,21 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import MainBoard from "./components/MainBoard";
+import update from "immutability-helper";
 
 class Game extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      squares: Array.from({ length: 9 }, e => Array(9).fill(null)),
+      history: [
+        {
+          squares: Array.from({ length: 9 }, e => Array(9).fill(null)),
+          validBoardNumbers: [0, 1, 2, 3, 4, 5, 6, 7, 8],
+          eachBoardStatus: Array(9).fill(null)
+        }
+      ],
       stepNumber: 0,
-      xIsNext: true,
-      validBoardNumbers: [0, 1, 2, 3, 4, 5, 6, 7, 8],
-      eachBoardStatus: Array(9).fill(null),
+      xIsNext: true
       /* eachBoardStatus -  null = board is still open or contested
                             'T'  = board is filled but no winner
                             'X'  = board is won by 'X' player
@@ -22,22 +27,26 @@ class Game extends React.Component {
   handleClick = (boardnumber, squarenumber) => {
     /* Game state will only progress on a click, so okay to put logic in here instead of render()?  Maybe? */
 
-    /*   const history = this.state.history.slice(0, this.state.stepNumber + 1);
-    const current = history[history.length - 1];*/
-    const squares = this.state.squares.slice();
-    const newEachBoardStatus = this.state.eachBoardStatus.slice();
+    const history = this.state.history.slice(0, this.state.stepNumber + 1);
+    const current = history[history.length - 1];
+    const newSquares = current.squares.slice();
+    const newEachBoardStatus = current.eachBoardStatus.slice();
     const newValidBoardNumbers = []; /* will be rebuilt every turn */
 
     /* check if square is filled, if so, do nothing on click */
     if (
-      squares[boardnumber][squarenumber] ||
-      !(this.state.validBoardNumbers.indexOf(boardnumber) > -1)
+      newSquares[boardnumber][squarenumber] ||
+      !(current.validBoardNumbers.indexOf(boardnumber) > -1)
     ) {
       return;
     }
 
+    const nextmove = this.state.xIsNext ? "X" : "O";
+
     /* if square is valid move, fill it */
-    squares[boardnumber][squarenumber] = this.state.xIsNext ? "X" : "O";
+    const squares = update(newSquares, {
+      [boardnumber]: { [squarenumber]: { $set: nextmove } }
+    });
 
     /* check if current EachBoard is won or filled */
     const lines = [
@@ -46,7 +55,7 @@ class Game extends React.Component {
       [6, 7, 8],
       [0, 3, 6],
       [1, 4, 7],
-      [2, 5, 8], 
+      [2, 5, 8],
       [0, 4, 8],
       [2, 4, 6]
     ];
@@ -99,16 +108,20 @@ class Game extends React.Component {
         newEachBoardStatus[a] === newEachBoardStatus[c]
       ) {
         /* we have a winner...  no more moves are legal */
-      newValidBoardNumbers.length = 0;
+        newValidBoardNumbers.length = 0;
       }
     }
 
     this.setState({
-      squares: squares,
+      history: history.concat([
+        {
+          squares: squares,
+          validBoardNumbers: newValidBoardNumbers,
+          eachBoardStatus: newEachBoardStatus
+        }
+      ]),
       xIsNext: !this.state.xIsNext,
-      stepNumber: this.state.stepNumber + 1,
-      validBoardNumbers: newValidBoardNumbers,
-      eachBoardStatus: newEachBoardStatus,
+      stepNumber: history.length
     });
   };
 
@@ -117,15 +130,13 @@ class Game extends React.Component {
       stepNumber: step,
       xIsNext: step % 2 === 0
     });
-  };
+  }
 
   render() {
-    /*
-    const winner = calculateWinner(this.state.eachBoardStatus);
+    const history = this.state.history;
+    const current = history[this.state.stepNumber];
     const moves = history.map((step, move) => {
-      const desc = move ?
-        'Go to move #' + move :
-        'Go to game start';
+      const desc = move ? "Go to move #" + move : "Go to game start";
       return (
         <li key={move}>
           <button onClick={() => this.jumpTo(move)}>{desc}</button>
@@ -133,37 +144,26 @@ class Game extends React.Component {
       );
     });
 
-    let status;
-    if (winner) {
-      status = "Winner: " + winner;
-    } else {
-      status = "Next player: " + (this.state.xIsNext ? "X" : "O");
-    }
-*/
     return (
       <div className="game">
         <div className="game-board">
           <MainBoard
-            squares={this.state.squares}
+            squares={current.squares}
             handleClick={this.handleClick}
-            stepNumber={this.state.stepNumber}
-            xIsNext={this.state.xIsNext} 
-            validBoardNumbers={this.state.validBoardNumbers}
-            eachBoardStatus={this.state.eachBoardStatus}
+            validBoardNumbers={current.validBoardNumbers}
+            eachBoardStatus={current.eachBoardStatus}
           />
         </div>
         <div className="game-info">
-        Current Player: {this.state.xIsNext ? "X" : "O"}<br/>
-        Valid Boards: {this.state.validBoardNumbers}<br/>
-        Board Status: {this.state.eachBoardStatus}
-          <div />
-          <ol />
+          Current Player: {this.state.xIsNext ? "X" : "O"}
+          <br />
+          Valid Boards: {this.state.validBoardNumbers}
+          <br />
+          <ol>{moves}</ol>
         </div>
       </div>
     );
-
   }
-
 }
 
 // ========================================
