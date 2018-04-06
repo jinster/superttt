@@ -7,6 +7,7 @@ import update from "immutability-helper";
 class Game extends React.Component {
   constructor(props) {
     super(props);
+    this.timer = null;
     this.state = {
       history: [
         {
@@ -132,6 +133,22 @@ class Game extends React.Component {
     });
   }
 
+  replayMoves = () => {
+    if (this.timer != null) {
+      clearInterval(this.timer);
+    }
+    let currentStep = 0;
+
+    this.timer = setInterval(() => {
+      if (currentStep >= this.state.history.length) {
+        clearInterval(this.timer);
+        return;
+      }
+      this.jumpTo(currentStep);
+      currentStep++;
+    }, 100);
+  }
+
   render() {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
@@ -139,7 +156,7 @@ class Game extends React.Component {
       const desc = move ? "Go to move #" + move : "Go to game start";
       return (
         <li key={move}>
-          <button onClick={() => this.jumpTo(move)}>{desc}</button>
+          <button onClick={() => this.jumpTo(move)} id={move}>{desc}</button>
         </li>
       );
     });
@@ -155,6 +172,7 @@ class Game extends React.Component {
           />
         </div>
         <div className="game-info">
+          <button onClick={this.replayMoves}>Replay moves</button>
           Current Player: {this.state.xIsNext ? "X" : "O"}
           <br />
           Valid Boards: {this.state.validBoardNumbers}
