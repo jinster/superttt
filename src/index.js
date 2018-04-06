@@ -132,6 +132,17 @@ class Game extends React.Component {
     });
   }
 
+  replayMoves() {
+    const history = this.state.history.slice();
+    for ( let i = 0; i < history.length ; i++) {
+      setTimeout(
+        this.setState({
+          stepNumber: i
+        }), 10000);
+      console.log(i);
+    }
+  }
+
   render() {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
@@ -155,6 +166,7 @@ class Game extends React.Component {
           />
         </div>
         <div className="game-info">
+          <button onClick={() => this.replayMoves()}>Replay Moves</button><br/>
           Current Player: {this.state.xIsNext ? "X" : "O"}
           <br />
           Valid Boards: {this.state.validBoardNumbers}
