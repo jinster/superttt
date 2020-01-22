@@ -1,7 +1,6 @@
 {
   "name": "superttt",
   "version": "0.1.0",
-  "homepage": "./superttt",
   "private": true,
   "dependencies": {
     "immutability-helper": "^2.6.6",
